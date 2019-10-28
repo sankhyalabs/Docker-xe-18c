@@ -22,10 +22,10 @@ $ sudo ros console switch ubuntu
 You will need to complete following prerequirements
 ```
 $ groupadd -g 54321 oinstall
-$ cd home
+$ cd /home
 $ mkdir oracle
-$ chown -R oracle:oinstall oracle/
 $ useradd -d /home/oracle -m -g oinstall -G docker -u 54321 oracle
+$ chown -R oracle:oinstall oracle/
 $ visudo
 # Add --> oracle ALL=(ALL) NOPASSWD: ALL
 # type it --> esc + :
