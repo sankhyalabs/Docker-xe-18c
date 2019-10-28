@@ -6,15 +6,34 @@ Build a Docker image containing Oracle XE 18c with optimized size (4.02 GB inste
 
 
 ## Oracle XE 18c Software
-[Download Oracle XE 18c](https://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html) `.rpm` file and drop it inside folder `18.4.0`.
+[Download Oracle XE 18c](https://jvtst-repository.s3.amazonaws.com/oracle-database-xe-18c-1.0-1.x86_64.rpm) `.rpm` file and drop it inside folder `18.4.0`.
+
+### AWS AMI 
+If you instantiate on amazon use this ami and follow these steps
+
+```
+AMI COD: ami-03383c16defb1ed02 | DESCRIPTION : RANCHEROS 1.5.4 
+$ ros console list
+$ sudo ros console switch ubuntu
+```
+
 
 ## Prerequirements
 You will need to complete following prerequirements
 ```
 $ groupadd -g 54321 oinstall
-$ useradd -d /home/oracle -m -g oinstall [-G docker] -u 54321 oracle
+$ cd home
+$ mkdir oracle
+$ chown -R oracle:oinstall oracle/
+$ useradd -d /home/oracle -m -g oinstall -G docker -u 54321 oracle
+$ visudo
+# Add --> oracle ALL=(ALL) NOPASSWD: ALL
+# type it --> esc + :
+# Save ---> wq!
+
 # Depending on your disk layout you will need to create 4 directories
-# e.g. you have one mount point called u01, create the following 4 directories below and switch the ownership to the oracle user
+# e.g. you have one mount point called u01, create the following 4 directories below and switch the ownership to the oracle # user
+$ chmod 777 /home/oracle/Docker-xe-18c/buildDockerImage.sh
 $ mkdir -p /u01/diag
 $ mkdir -p /u01/oradata
 $ mkdir -p /u01/fast_recovery_area
@@ -101,7 +120,3 @@ docker exec -it oraxe18c rman @/opt/oracle/tools/full_bkp.rman
 ```
 In case you want to execute the RMAN Backup job from crontab replace `-it` with `-i`
 
-## License
-To download and run Oracle Database, regardless whether inside or outside a Docker container, you must download the binaries from the Oracle website and accept the license indicated at that page.
-
-All scripts and files hosted in this project and GitHub repository required to build the Docker images are, unless otherwise noted, released under [UPL 1.0](https://oss.oracle.com/licenses/upl/) license.
